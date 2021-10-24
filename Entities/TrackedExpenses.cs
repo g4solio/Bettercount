@@ -1,6 +1,6 @@
 namespace Bettercount.Entities
 {
-    public class TrackedExpenses
+    public class TrackedExpense
     {
 
         public string UId;

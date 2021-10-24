@@ -11,14 +11,16 @@ namespace Bettercount.Entities.Dispatchers
             return null;
         }
 
+        
+
         public MockedBettercountDispatcher()
         {
             
         }
 
 
-                internal IDictionary<string, IEnumerable<BettercountPreviewEntity>> mockedBettercounts 
-        = new Dictionary<string, IEnumerable<BettercountPreviewEntity>>()
+        internal IDictionary<string, IEnumerable<BettercountPreviewEntity>> mockedBettercounts 
+            = new Dictionary<string, IEnumerable<BettercountPreviewEntity>>()
         {
             {"aaab2", new List<BettercountPreviewEntity>()
                 {
