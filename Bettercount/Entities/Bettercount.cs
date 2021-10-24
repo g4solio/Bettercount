@@ -9,7 +9,7 @@ namespace Bettercount.Entities
 
     public class BettercountEntity : BettercountPreviewEntity
     {
-        internal ListWithEvents<TrackedExpense> _trackedExpenses = new ListWithEvents<TrackedExpense>();
+        private ListWithEvents<TrackedExpense> _trackedExpenses = new ListWithEvents<TrackedExpense>();
 
         public IEnumerable<TrackedExpense> TrackedExpenses {get => _trackedExpenses; internal set => _trackedExpenses = new ListWithEvents<TrackedExpense>(value);}
 
@@ -18,6 +18,7 @@ namespace Bettercount.Entities
         public BettercountEntity()
         {
             RegisterEvents();
+            TrackedDebt = new SortedDictionary<User, double>();
         }
 
         private void RegisterEvents()
@@ -31,7 +32,9 @@ namespace Bettercount.Entities
             var resolvedExpenses = removedExpense.ResolveExpense();
             foreach(var resolvedExpense in resolvedExpenses)
             {
-                TrackedDebt[resolvedExpense.user] -= resolvedExpense.lamdaMoney;
+                if(TrackedDebt.ContainsKey(resolvedExpense.user))
+                    TrackedDebt[resolvedExpense.user] -= resolvedExpense.lamdaMoney;
+                else TrackedDebt.Add(resolvedExpense.user, -resolvedExpense.lamdaMoney);
             }
         }
 
@@ -39,9 +42,16 @@ namespace Bettercount.Entities
         {
             var resolvedExpenses = newExpense.ResolveExpense();
             foreach(var resolvedExpense in resolvedExpenses)
-            {
-                TrackedDebt[resolvedExpense.user] += resolvedExpense.lamdaMoney;
+            {   
+                if(TrackedDebt.ContainsKey(resolvedExpense.user))
+                    TrackedDebt[resolvedExpense.user] += resolvedExpense.lamdaMoney;
+                else TrackedDebt.Add(resolvedExpense.user, resolvedExpense.lamdaMoney);
             }
+        }
+
+        public void AddExpense(TrackedExpense expense)
+        {
+            _trackedExpenses.Add(expense);
         }
     }
 
